@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">krishi</string>
+    <string name="lat_txt">0</string>
+    <string name="long_txt">0</string>
+    <string name="city_txt">0</string>
+    <string name="latitude">Lat</string>
+    <string name="longitude">Long</string>
+    <string name="city">City</string>
+    <string name="no_location_detected">No Location Detected</string>
+
+</resources>
