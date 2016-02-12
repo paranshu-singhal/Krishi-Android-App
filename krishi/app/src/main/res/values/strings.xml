@@ -1,11 +1,27 @@
 <resources>
-    <string name="app_name">krishi</string>
+    <string name="app_name">Krishi</string>
     <string name="lat_txt">0</string>
     <string name="long_txt">0</string>
-    <string name="city_txt">0</string>
     <string name="latitude">Lat</string>
     <string name="longitude">Long</string>
-    <string name="city">City</string>
+    <string name="wthr_btn">Weather</string>
+    <string name="crop_btn">Crop Info</string>
+    <string name="title_activity_maps">Map</string>
     <string name="no_location_detected">No Location Detected</string>
     <string name="location_detected">Location enabled</string>
+    <string name="conn_failed">Connection Failed. Please check your network settings.</string>
+    <string name="RESULT_CANCELED">User chose not to make required location settings changes.</string>
+    <string name="title_activity_scrolling1">scrollingActivity1</string>
+    <string name="paddy_btn">Paddy</string>
+    <string name="title">Title: </string>
+    <string name="description">Description: </string>
+    <string name="title_activity_news">newsActivity</string>
+    <string name="day_cons">Day: </string>
+    <string name="maxTemp_cons">Maximum Temperature: </string>
+    <string name="minTemp_cons">Minimum Temperature: </string>
+    <string name="humid_cons">Humidity: </string>
+    <string name="cloud_cons">Clouds: </string>
+    <string name="speed_cons">Speed of Wind: </string>
+    <string name="weather_cons">Weather: </string>
+    <string name="current_news">Current News</string>
 </resources>
