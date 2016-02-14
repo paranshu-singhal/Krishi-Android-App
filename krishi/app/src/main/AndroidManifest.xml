@@ -36,7 +36,8 @@
         <activity android:name=".cropList" />
         <activity
             android:name=".newsActivity"
-            android:label="@string/title_activity_news"></activity>
+            android:label="@string/title_activity_news" />
+        <activity android:name=".web_view"></activity>
     </application>
 
 </manifest>

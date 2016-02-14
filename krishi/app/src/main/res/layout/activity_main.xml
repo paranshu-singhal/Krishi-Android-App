@@ -9,41 +9,62 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.majors.paranshusinghal.krishi.MainActivity"
     android:id="@+id/main_layout"
-    android:clickable="true"
-    android:background="#fff"
-    android:backgroundTint="#ffffff">
-
+    tools:ignore="contentDescription">
     <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/gridLayout"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:nestedScrollingEnabled="false">
-
-        <Button
-            android:layout_width="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
+        <LinearLayout
             android:layout_height="wrap_content"
-            android:text="@string/wthr_btn"
-            android:drawableTop="@drawable/kweather"
-            android:textAlignment="center"
-            android:backgroundTint="#fbfbfb"
-            android:paddingBottom="20dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:id="@+id/wthr_btn"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
             android:layout_row="0"
             android:layout_column="0"
+            android:orientation="vertical"
             android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:onClick="onClickWthr"
-            android:background="@drawable/button"
-            />
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp">
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:id="@+id/weatherImageView"
+                />
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/wthr_btn"
+                android:id="@+id/weatherButton"
+                android:onClick="onClickWthr"
+                android:clickable="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:onClick="onClickCrop"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp">
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:id="@+id/cropListImageView" />
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/crop_btn"
+                android:id="@+id/cropListButton"
+                android:onClick="onClickCrop"
+                android:clickable="true" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_height="wrap_content"
@@ -52,49 +73,48 @@
             android:layout_column="0"
             android:orientation="vertical"
             android:clickable="true"
-            android:contextClickable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:background="@drawable/button"
-            android:backgroundTint="#fbfbfb"
-            android:textAlignment="center"
-            android:onClick="onClickNews">
+            android:onClick="onClickNews"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp">
             <ImageView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:id="@+id/newsImageView"
-              />
+                />
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/current_news"
                 android:id="@+id/newsButton"
-                android:layout_marginStart="11dp"
                 android:onClick="onClickNews"
                 android:clickable="true" />
         </LinearLayout>
-
-
-        <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
             android:layout_height="wrap_content"
-            android:text="@string/crop_btn"
-            android:drawableTop="@drawable/icontexto_green_01"
-            android:textAlignment="center"
-            android:backgroundTint="#fbfbfb"
-            android:paddingBottom="20dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:layout_row="0"
-            android:layout_column="2"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/crop_btn"
+            android:layout_width="wrap_content"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:orientation="vertical"
             android:clickable="true"
-            android:onClick="onClickCrop"
-            android:background="@drawable/button" />
-    </GridLayout>
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:onClick="onClickScheme"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp">
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:id="@+id/schemesImageView" />
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/govt_schemes"
+                android:id="@+id/schemesButton"
+                android:onClick="onClickScheme"
+                android:clickable="true" />
+        </LinearLayout>
 
+    </GridLayout>
 </RelativeLayout>

@@ -4,8 +4,8 @@
     <string name="long_txt">0</string>
     <string name="latitude">Lat</string>
     <string name="longitude">Long</string>
-    <string name="wthr_btn">Weather</string>
-    <string name="crop_btn">Crop Info</string>
+    <string name="wthr_btn">Weather Forecast</string>
+    <string name="crop_btn">Crop Information</string>
     <string name="title_activity_maps">Map</string>
     <string name="no_location_detected">No Location Detected</string>
     <string name="location_detected">Location enabled</string>
@@ -23,5 +23,12 @@
     <string name="cloud_cons">Clouds: </string>
     <string name="speed_cons">Speed of Wind: </string>
     <string name="weather_cons">Weather: </string>
-    <string name="current_news">Current News</string>
+    <string name="current_news">Current News and Updates</string>
+    <string name="connection_error">connection_error</string>
+    <string name="xml_error">xml_error</string>
+    <string name="google_app_id">AIzaSyAf8FCQCL4hynw9tnucPoz-xd8eO9LsKxA</string>
+    <string name="title_activity_web_view">web_view</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="govt_schemes">Govt Programmes</string>
 </resources>

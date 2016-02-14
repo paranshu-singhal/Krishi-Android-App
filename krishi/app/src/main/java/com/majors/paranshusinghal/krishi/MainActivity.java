@@ -47,16 +47,35 @@ public class MainActivity extends Activity {
             AlertDialog alert = builder.create();
             alert.show();
         }
-        final ImageView newsImageView = (ImageView)findViewById(R.id.newsImageView);
+        final ImageView newsImageView     = (ImageView)findViewById(R.id.newsImageView);
+        final ImageView weatherImageView  = (ImageView)findViewById(R.id.weatherImageView);
+        final ImageView cropListImageView = (ImageView)findViewById(R.id.cropListImageView);
+        final ImageView schemeImageView   = (ImageView)findViewById(R.id.schemesImageView);
         newsImageView.post(new Runnable() {
             @Override
             public void run() {
                 int ht = newsImageView.getMeasuredHeight();
                 int wd = newsImageView.getMeasuredWidth();
-                int resID = getResources().getIdentifier("news_icon" , "drawable", TAG);
-                Bitmap unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
+                int newsResID     = getResources().getIdentifier("news_icon", "drawable", TAG);
+                int weatherResID  = getResources().getIdentifier("weather_icon" , "drawable", TAG);
+                int cropListResID = getResources().getIdentifier("plant_icon" , "drawable", TAG);
+
+                Bitmap weatherUnscaledBitmap = BitmapFactory.decodeResource(getResources(), weatherResID);
+                Bitmap cropListUnscaledBitmap = BitmapFactory.decodeResource(getResources(), cropListResID);
+                Bitmap newsUnscaledBitmap = BitmapFactory.decodeResource(getResources(), newsResID);
+
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(weatherUnscaledBitmap, wd, ht, true);
+                weatherImageView.setImageBitmap(scaledBitmap);
+                scaledBitmap = Bitmap.createScaledBitmap(cropListUnscaledBitmap, wd, ht, true);
+                cropListImageView.setImageBitmap(scaledBitmap);
+                scaledBitmap = Bitmap.createScaledBitmap(newsUnscaledBitmap, wd, ht, true);
                 newsImageView.setImageBitmap(scaledBitmap);
+
+                int resID = getResources().getIdentifier("hands_icon" , "drawable", TAG);
+                Bitmap unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
+                schemeImageView.setImageBitmap(scaledBitmap);
+
             }
         });
 
@@ -76,6 +95,9 @@ public class MainActivity extends Activity {
 
         Intent intent = new Intent(this, cropList.class);
         startActivity(intent);
+    }
+    public void onClickScheme(View view){
+
     }
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager

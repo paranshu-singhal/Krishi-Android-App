@@ -2,7 +2,6 @@ package com.majors.paranshusinghal.krishi;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -10,10 +9,10 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.util.Log;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.view.View;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -46,8 +45,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -65,6 +62,7 @@ public class MapsActivity extends Activity implements
     protected static final String TAG = "MapsActivity";
     protected LocationRequest mlocationrequest;
     protected LocationSettingsRequest mlocationsettingsrequest;
+    protected ProgressBar progressBar;
 
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     protected static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
@@ -75,8 +73,9 @@ public class MapsActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        progressBar = (ProgressBar)findViewById(R.id.maps_progressBar);
+        progressBar.setVisibility(View.VISIBLE);
         buildGoogleApiClient();
-
     }
     @Override
     protected void onStart(){
@@ -113,7 +112,6 @@ public class MapsActivity extends Activity implements
             case REQUEST_CHECK_SETTINGS:
                 switch (resultCode) {
                     case Activity.RESULT_OK:
-                        Toast.makeText(this, R.string.location_detected, Toast.LENGTH_LONG).show();
                         final Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -123,7 +121,7 @@ public class MapsActivity extends Activity implements
                         }, 3000);
                         break;
                     case Activity.RESULT_CANCELED:
-                        //Log.i(TAG, "User chose not to make required location settings changes.");
+                        //Log.d(TAG, "User chose not to make required location settings changes.");
                         Toast.makeText(this, R.string.RESULT_CANCELED, Toast.LENGTH_LONG).show();
                         break;
                 }
@@ -147,7 +145,6 @@ public class MapsActivity extends Activity implements
                     status.startResolutionForResult(MapsActivity.this, REQUEST_CHECK_SETTINGS);
 
                 } catch (IntentSender.SendIntentException e) {
-
                     //unable to execute request
                 }
                 break;
@@ -182,6 +179,7 @@ public class MapsActivity extends Activity implements
         result.setResultCallback(this);
     }
     public void getLocation(){
+
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             MapFragment map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map));
@@ -257,6 +255,7 @@ public class MapsActivity extends Activity implements
 
         @Override
         protected void onPostExecute(String s) {
+            progressBar.setVisibility(View.GONE);
             JSONObject json;
             try{
                 json = new JSONObject(s);
@@ -281,7 +280,7 @@ public class MapsActivity extends Activity implements
                 custom_row_weather_adaptor adaptor = new custom_row_weather_adaptor(MapsActivity.this, R.layout.custom_row_weather, list);
                 listView.setAdapter(adaptor);
             }
-            catch (Throwable t){t.printStackTrace();};
+            catch (Throwable t){t.printStackTrace();}
         }
 
     }

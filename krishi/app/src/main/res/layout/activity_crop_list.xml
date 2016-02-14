@@ -28,8 +28,7 @@
             android:layout_column="0"
             android:drawableTop="@drawable/rsz_paddy"
             android:clickable="true"
-            android:paddingTop="5dp"
-            android:paddingBottom="4dp"
+            android:padding="5dp"
             android:background="@drawable/button"
             android:layout_margin="5dp"
             android:onClick="onclick" />
@@ -43,8 +42,7 @@
             android:layout_column="1"
             android:drawableTop="@drawable/rsz_maize"
             android:clickable="true"
-            android:paddingTop="5dp"
-            android:paddingBottom="4dp"
+            android:padding="5dp"
             android:background="@drawable/button"
             android:layout_margin="5dp"
             android:onClick="onclick"/>
@@ -58,8 +56,7 @@
             android:layout_column="2"
             android:drawableTop="@drawable/rsz_sugar"
             android:clickable="true"
-            android:paddingTop="5dp"
-            android:paddingBottom="4dp"
+            android:padding="5dp"
             android:background="@drawable/button"
             android:layout_margin="5dp"
             android:onClick="onclick"/>
@@ -73,8 +70,7 @@
             android:layout_column="0"
             android:drawableTop="@drawable/rsz_potato"
             android:clickable="true"
-            android:paddingTop="5dp"
-            android:paddingBottom="4dp"
+            android:padding="5dp"
             android:background="@drawable/button"
             android:layout_margin="5dp"
             android:onClick="onclick"/>
@@ -88,8 +84,7 @@
             android:layout_column="1"
             android:drawableTop="@drawable/rsz_tomato"
             android:clickable="true"
-            android:paddingTop="5dp"
-            android:paddingBottom="4dp"
+            android:padding="5dp"
             android:background="@drawable/button"
             android:layout_margin="5dp"
             android:onClick="onclick"/>
@@ -103,8 +98,7 @@
             android:layout_column="2"
             android:drawableTop="@drawable/rsz_wheat"
             android:clickable="true"
-            android:paddingTop="5dp"
-            android:paddingBottom="4dp"
+            android:padding="5dp"
             android:background="@drawable/button"
             android:layout_margin="5dp"
             android:onClick="onclick"/>

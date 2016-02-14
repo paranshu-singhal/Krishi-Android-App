@@ -11,11 +11,17 @@
         android:id="@+id/news_activity_imageView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
-
+    <ProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/news_progressBar"
+        android:layout_below="@+id/news_activity_imageView"
+        android:layout_centerHorizontal="true" />
     <ListView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/news_activity_listView"
-        android:layout_below="@+id/news_activity_imageView"
+        android:layout_below="@+id/news_progressBar"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

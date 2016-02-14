@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 public class custom_row_weather_adaptor extends ArrayAdapter {
 
