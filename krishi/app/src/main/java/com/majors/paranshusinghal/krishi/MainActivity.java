@@ -1,6 +1,5 @@
 package com.majors.paranshusinghal.krishi;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,11 +10,12 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.content.Intent;
 import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
+
 import android.view.View;
 import android.widget.ImageView;
 
-
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG ="com.majors.paranshusinghal.krishi";
 
@@ -23,6 +23,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        /*
         boolean flag = isNetworkAvailable();
         if(!flag){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -47,6 +48,7 @@ public class MainActivity extends Activity {
             AlertDialog alert = builder.create();
             alert.show();
         }
+        */
         final ImageView newsImageView     = (ImageView)findViewById(R.id.newsImageView);
         final ImageView weatherImageView  = (ImageView)findViewById(R.id.weatherImageView);
         final ImageView cropListImageView = (ImageView)findViewById(R.id.cropListImageView);
@@ -56,9 +58,9 @@ public class MainActivity extends Activity {
             public void run() {
                 int ht = newsImageView.getMeasuredHeight();
                 int wd = newsImageView.getMeasuredWidth();
-                int newsResID     = getResources().getIdentifier("news_icon", "drawable", TAG);
-                int weatherResID  = getResources().getIdentifier("weather_icon" , "drawable", TAG);
-                int cropListResID = getResources().getIdentifier("plant_icon" , "drawable", TAG);
+                int newsResID = getResources().getIdentifier("news_icon", "drawable", TAG);
+                int weatherResID = getResources().getIdentifier("weather_icon", "drawable", TAG);
+                int cropListResID = getResources().getIdentifier("plant_icon", "drawable", TAG);
 
                 Bitmap weatherUnscaledBitmap = BitmapFactory.decodeResource(getResources(), weatherResID);
                 Bitmap cropListUnscaledBitmap = BitmapFactory.decodeResource(getResources(), cropListResID);
@@ -71,7 +73,7 @@ public class MainActivity extends Activity {
                 scaledBitmap = Bitmap.createScaledBitmap(newsUnscaledBitmap, wd, ht, true);
                 newsImageView.setImageBitmap(scaledBitmap);
 
-                int resID = getResources().getIdentifier("hands_icon" , "drawable", TAG);
+                int resID = getResources().getIdentifier("hands_icon", "drawable", TAG);
                 Bitmap unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
                 scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
                 schemeImageView.setImageBitmap(scaledBitmap);

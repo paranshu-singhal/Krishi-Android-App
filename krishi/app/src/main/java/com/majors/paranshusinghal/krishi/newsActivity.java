@@ -1,11 +1,15 @@
 package com.majors.paranshusinghal.krishi;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.Xml;
 import android.view.View;
@@ -13,15 +17,31 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class newsActivity extends Activity {
 
@@ -47,18 +67,36 @@ public class newsActivity extends Activity {
             }
         });
         */
-        progressBar = (ProgressBar)findViewById(R.id.news_progressBar);
+        progressBar = (ProgressBar) findViewById(R.id.news_progressBar);
         progressBar.setVisibility(View.GONE);
 
-        DownloadXmlTask task = new DownloadXmlTask();
-        task.execute();
-
-        ListView news_list = (ListView)findViewById(R.id.news_activity_listView);
+        ListView news_list = (ListView) findViewById(R.id.news_activity_listView);
+        File fileNewsCache = new File(getExternalCacheDir(), "newsCache");
+        if (isNetworkAvailable()) {
+            Log.d(TAGlog,"online");
+            DownloadXmlTask task = new DownloadXmlTask();
+            task.execute();
+        } else if(fileNewsCache.exists()){
+            Log.d(TAGlog,"offline");
+            try {
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileNewsCache));
+                //long size = ois.readInt();
+                List<newselement> list = convert2List(new JSONArray((String) ois.readObject()));
+                customNewsAdaptor adaptor = new customNewsAdaptor(newsActivity.this, R.layout.listview_raw, list);
+                news_list.setAdapter(adaptor);
+            } catch (Throwable t) {
+                Log.d(TAGlog, t.getMessage());
+                t.printStackTrace();
+            }
+        }else{
+            Toast.makeText(newsActivity.this, "Please check network settings", Toast.LENGTH_LONG).show();
+            newsActivity.this.finish();
+        }
         news_list.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        newselement ns = (newselement)parent.getItemAtPosition(position);
+                        newselement ns = (newselement) parent.getItemAtPosition(position);
                         Bundle bundle = new Bundle();
                         bundle.putString("link", ns.getLink());
                         Intent intent = new Intent(newsActivity.this, web_view.class);
@@ -69,7 +107,7 @@ public class newsActivity extends Activity {
         );
     }
 
-    private class DownloadXmlTask extends AsyncTask<Void,Void,List<newselement> > {
+    private class DownloadXmlTask extends AsyncTask<Void, Void, List<newselement>> {
 
         @Override
         protected void onPreExecute() {
@@ -95,14 +133,19 @@ public class newsActivity extends Activity {
                 StackOverflowXmlParser objParse = new StackOverflowXmlParser();
                 entries = objParse.parse(stream);
             } catch (Throwable t) {
-                t.printStackTrace();}
-              finally {
+                t.printStackTrace();
+            } finally {
                 if (stream != null) {
-                    try {stream.close();} catch (Throwable t) {t.printStackTrace();}
+                    try {
+                        stream.close();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
                 }
             }
             return entries;
         }
+
         @Override
         protected void onPostExecute(List<newselement> list) {
             progressBar.setVisibility(View.GONE);
@@ -111,25 +154,32 @@ public class newsActivity extends Activity {
                 ListView listView = (ListView) findViewById(R.id.news_activity_listView);
                 customNewsAdaptor adaptor = new customNewsAdaptor(newsActivity.this, R.layout.listview_raw, list);
                 listView.setAdapter(adaptor);
-            }
-            catch (Throwable t){
-                Log.d(TAGlog,t.getMessage());
+
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getExternalCacheDir(), "newsCache")));
+                JSONArray array = convert2JSON(list);
+             //   oos.writeInt(array.length());
+                oos.writeObject(array.toString());
+            } catch (Throwable t) {
+                Log.d(TAGlog, t.getMessage());
                 t.printStackTrace();
             }
         }
     }
+
     public class StackOverflowXmlParser {
         private final String ns = null;
+
         public List<newselement> parse(InputStream in) throws XmlPullParserException, IOException {
 
-            XmlPullParser parser=null;
+            XmlPullParser parser = null;
             try {
                 parser = Xml.newPullParser();
                 parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
                 parser.setInput(in, null);
                 parser.nextTag();
+            } catch (Throwable t) {
+                t.printStackTrace();
             }
-            catch (Throwable t){t.printStackTrace();}
             return readFeed(parser);
         }
 
@@ -142,14 +192,15 @@ public class newsActivity extends Activity {
                 }
                 String name = parser.getName();
                 if (name.equals("channel")) {
-                    entries=readChannel(parser);
-                }else{
+                    entries = readChannel(parser);
+                } else {
                     skip(parser);
                 }
             }
             return entries;
         }
-        private  List<newselement> readChannel(XmlPullParser parser) throws XmlPullParserException, IOException {
+
+        private List<newselement> readChannel(XmlPullParser parser) throws XmlPullParserException, IOException {
             List<newselement> entries = new ArrayList<>();
             while (parser.next() != XmlPullParser.END_TAG) {
                 if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -159,12 +210,13 @@ public class newsActivity extends Activity {
                 if (name.equals("item")) {
                     newselement news = readEntry(parser);
                     entries.add(news);
-                }else{
+                } else {
                     skip(parser);
                 }
             }
             return entries;
         }
+
         private newselement readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
             String title = null;
             String summary = null;
@@ -183,8 +235,7 @@ public class newsActivity extends Activity {
                     link = readLink(parser);
                 } else if (name.equals("pubDate")) {
                     pubDate = readDate(parser);
-                }
-                else{
+                } else {
                     skip(parser);
                 }
             }
@@ -231,6 +282,7 @@ public class newsActivity extends Activity {
             }
             return result;
         }
+
         private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 throw new IllegalStateException();
@@ -249,5 +301,47 @@ public class newsActivity extends Activity {
         }
 
     }
-}
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private JSONArray convert2JSON(List<newselement> list) {
+
+        JSONArray array = new JSONArray();
+        for (newselement element : list) {
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("title", element.getTitle());
+                obj.put("description", element.getDescription());
+                obj.put("link", element.getLink());
+                obj.put("pubDate", element.getPubDate());
+            } catch (Throwable t) {
+                Log.d(TAGlog,"convert2JSON  "+t.getMessage());
+                t.printStackTrace();
+            }
+            array.put(obj);
+        }
+        return array;
+    }
+
+    private List<newselement> convert2List(JSONArray array) {
+
+        List<newselement> list = new ArrayList<>();
+        try {
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject obj = array.getJSONObject(i);
+                newselement element = new newselement(obj.getString("title"), obj.getString("description"),
+                            obj.getString("link"), obj.getString("pubDate"));
+                    list.add(element);
+            }
+        } catch (Throwable t) {
+            t.printStackTrace();
+            Log.d(TAGlog, "convert2List "+t.getMessage());
+        }
+        return list;
+    }
+}

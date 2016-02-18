@@ -41,14 +41,22 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.BufferedReader;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import javax.net.ssl.SSLEngineResult;
 
 public class MapsActivity extends Activity implements
         ConnectionCallbacks,
@@ -66,8 +74,9 @@ public class MapsActivity extends Activity implements
 
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     protected static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final String TAGlog = "myTAG";
 
-    List list = new ArrayList();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +84,28 @@ public class MapsActivity extends Activity implements
         setContentView(R.layout.activity_maps);
         progressBar = (ProgressBar)findViewById(R.id.maps_progressBar);
         progressBar.setVisibility(View.VISIBLE);
-        buildGoogleApiClient();
+
+        File fileWeatherCache = new File(getExternalCacheDir(), "weatherCache");
+        if(isNetworkAvailable()){
+            buildGoogleApiClient();
+        }
+        else if(fileWeatherCache.exists()){
+            ListView listView = (ListView)findViewById(R.id.listWeather);
+            try {
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileWeatherCache));
+                List<custom_raw_weather_holderClass> list = convert2List(new JSONArray((String) ois.readObject()));
+                custom_row_weather_adaptor adaptor = new custom_row_weather_adaptor(MapsActivity.this, R.layout.custom_row_weather, list);
+                listView.setAdapter(adaptor);
+            }
+            catch (Throwable t){
+                Log.d(TAGlog, t.getMessage());
+                t.printStackTrace();
+            }
+        }
+        else{
+            Toast.makeText(MapsActivity.this, "Please check network settings", Toast.LENGTH_LONG).show();
+            MapsActivity.this.finish();
+        }
     }
     @Override
     protected void onStart(){
@@ -97,7 +127,14 @@ public class MapsActivity extends Activity implements
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         //             Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
-                        Toast.makeText(this, R.string.conn_failed, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.conn_failed, Toast.LENGTH_LONG).show();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                buildGoogleApiClient();
+            }
+        }, 2000);
     }
     @Override
     public void onConnectionSuspended(int cause) {
@@ -123,6 +160,7 @@ public class MapsActivity extends Activity implements
                     case Activity.RESULT_CANCELED:
                         //Log.d(TAG, "User chose not to make required location settings changes.");
                         Toast.makeText(this, R.string.RESULT_CANCELED, Toast.LENGTH_LONG).show();
+                        MapsActivity.this.finish();
                         break;
                 }
                 break;
@@ -186,6 +224,13 @@ public class MapsActivity extends Activity implements
             map.getMapAsync(this);
         } else {
             Toast.makeText(this, R.string.no_location_detected, Toast.LENGTH_LONG).show();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getLocation();
+                }
+            },3000);
         }
     }
     @Override
@@ -210,6 +255,13 @@ public class MapsActivity extends Activity implements
         afterConn();}
         else{
             Toast.makeText(this, "Please check network settings", Toast.LENGTH_LONG).show();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    weatherForecast();
+                }
+            }, 2000);
         }
     }
 
@@ -257,6 +309,7 @@ public class MapsActivity extends Activity implements
         protected void onPostExecute(String s) {
             progressBar.setVisibility(View.GONE);
             JSONObject json;
+            List list = new ArrayList();
             try{
                 json = new JSONObject(s);
                 JSONArray jsonArray = json.getJSONArray("list");
@@ -279,10 +332,59 @@ public class MapsActivity extends Activity implements
                 ListView listView = (ListView)findViewById(R.id.listWeather);
                 custom_row_weather_adaptor adaptor = new custom_row_weather_adaptor(MapsActivity.this, R.layout.custom_row_weather, list);
                 listView.setAdapter(adaptor);
+
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getExternalCacheDir(), "weatherCache")));
+                JSONArray array = convert2JSON(list);
+                oos.writeObject(array.toString());
             }
             catch (Throwable t){t.printStackTrace();}
         }
 
+    }
+    private JSONArray convert2JSON(List<custom_raw_weather_holderClass> list) {
+
+        JSONArray array = new JSONArray();
+        for (custom_raw_weather_holderClass element : list) {
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("maxTemp", element.getMaxTemp());
+                obj.put("minTemp", element.getMinTemp());
+                obj.put("humidity", element.getHumidity());
+                obj.put("clouds", element.getClouds());
+                obj.put("speed", element.getSpeed());
+                obj.put("weather", element.getWeather());
+                obj.put("date", element.getDate());
+            } catch (Throwable t) {
+                Log.d(TAGlog,"convert2JSON  "+t.getMessage());
+                t.printStackTrace();
+            }
+            array.put(obj);
+        }
+        return array;
+    }
+
+    private List<custom_raw_weather_holderClass> convert2List(JSONArray array) {
+
+        List<custom_raw_weather_holderClass> list = new ArrayList<>();
+        try {
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject obj = array.getJSONObject(i);
+                custom_raw_weather_holderClass element = new custom_raw_weather_holderClass(obj.getDouble("maxTemp"), obj.getDouble("minTemp"),
+                        obj.getDouble("humidity"),obj.getDouble("clouds"), obj.getDouble("speed"), obj.getString("weather"),
+                        new SimpleDateFormat("EE MMM dd").parse(obj.getString("date")));
+                list.add(element);
+            }
+        } catch (Throwable t) {
+            t.printStackTrace();
+            Log.d(TAGlog, "convert2List "+t.getMessage());
+        }
+        return list;
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
 

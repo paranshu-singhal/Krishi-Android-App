@@ -1,12 +1,15 @@
 package com.majors.paranshusinghal.krishi;
-public class newselement {
 
-    private String title;
-    private String description;
-    private String link;
-    private String pubDate;
+import java.io.Serializable;
 
-    public newselement(String title, String desc, String link, String pubDate) {
+public class newselement implements Serializable{
+
+    private transient String title;
+    private transient String description;
+    private transient String link;
+    private transient String pubDate;
+
+    public newselement(String title, String desc, String link, String pubDate){
         this.title = title;
         this.description = desc;
         this.link=link;
