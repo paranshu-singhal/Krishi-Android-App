@@ -139,6 +139,28 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/imageViewCity"
+                    android:src="@drawable/location"
+                    android:layout_marginTop="6dp" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:ems="15"
+                    android:hint="City"
+                    android:id="@+id/editTextCity"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:id="@+id/imageViewState"
                     android:src="@drawable/location"
                     android:layout_marginTop="6dp" />

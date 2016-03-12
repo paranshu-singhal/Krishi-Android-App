@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.util.Log;
 
 public class sqliteDB extends SQLiteOpenHelper{
@@ -26,7 +27,8 @@ public class sqliteDB extends SQLiteOpenHelper{
     private static final String COLUMN_NAME_6 = "address2";
     private static final String COLUMN_NAME_7 = "state";
     private static final String COLUMN_NAME_8 = "country";
-
+    private static final String COLUMN_NAME_9 = "city";
+    private static final String COLUMN_NAME_10 = "tag";
 
 
     public sqliteDB(Context context) {
@@ -36,16 +38,19 @@ public class sqliteDB extends SQLiteOpenHelper{
         onInsert(val);
         val.put(COLUMN_NAME_NUMBER, "9810162034");
         onInsert(val);
-        val = new ContentValues();
-        val.put(COLUMN_NAME_1,"56dc0285198414.83539582");
-        val.put(COLUMN_NAME_2,"Labhansh");
-        val.put(COLUMN_NAME_3,"9876543211");
-        val.put(COLUMN_NAME_4,"labhansh");
-        val.put(COLUMN_NAME_5,"23, DLF");
-        val.put(COLUMN_NAME_6,"Gurgaon");
-        val.put(COLUMN_NAME_7,"Delhi");
-        val.put(COLUMN_NAME_8,"India");
-        onInsertUser(val);
+
+        ContentValues val2 = new ContentValues();
+        val2.put(COLUMN_NAME_1,"56dc0285198414.83539582");
+        val2.put(COLUMN_NAME_2,"Labhansh");
+        val2.put(COLUMN_NAME_3,"9876543211");
+        val2.put(COLUMN_NAME_4,"labhansh");
+        val2.put(COLUMN_NAME_5,"23, DLF");
+        val2.put(COLUMN_NAME_6,"Gurgaon");
+        val2.put(COLUMN_NAME_7,"Delhi");
+        val2.put(COLUMN_NAME_8,"India");
+        val2.put(COLUMN_NAME_9,"New Delhi");
+        val2.put(COLUMN_NAME_10,"farmer");
+        onInsertUser(val2);
     }
 
     @Override
@@ -53,19 +58,22 @@ public class sqliteDB extends SQLiteOpenHelper{
 
         String query = "CREATE TABLE " + TABLE_NAME + "( " + COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_NAME_NUMBER + " TEXT UNIQUE NOT NULL);";
-     //   Log.d(TAGlog, query);
+        Log.d(TAGlog, query);
         db.execSQL(query);
 
-        query = "CREATE TABLE "+ TABLE_NAME_2 + " ( " + COLUMN_NAME_1 + "TEXT PRIMARY KEY, "+
+        String query2 = "CREATE TABLE "+ TABLE_NAME_2 + " ( " + COLUMN_NAME_1 + " TEXT PRIMARY KEY, "+
                 COLUMN_NAME_2 + " TEXT, "+
                 COLUMN_NAME_3 + " TEXT UNIQUE, "+
                 COLUMN_NAME_4 + " TEXT, "+
                 COLUMN_NAME_5 + " TEXT, "+
                 COLUMN_NAME_6 + " TEXT, "+
+                COLUMN_NAME_9 + " TEXT, "+
                 COLUMN_NAME_7 + " TEXT, "+
+                COLUMN_NAME_10 + " TEXT, "+
                 COLUMN_NAME_8 + " TEXT); ";
-        //   Log.d(TAGlog, query);
-        db.execSQL(query);
+
+        Log.d(TAGlog, query2);
+        db.execSQL(query2);
     }
 
     @Override
@@ -84,23 +92,29 @@ public class sqliteDB extends SQLiteOpenHelper{
         try {
             SQLiteDatabase db = getWritableDatabase();
             id = db.insert(TABLE_NAME, null, values);
-            Log.d(TAGlog, String.format("inserted with id: %d ", id));
+        //    Log.d(TAGlog, String.format("inserted with id: %d ", id));
         }
         catch (Throwable t){Log.d(TAGlog,t.getMessage());}
         return  id;
     }
 
-    public Cursor onQueryUser(){
+    public Cursor onQueryUser(Uri uri){
+
+        String phone = uri.getQueryParameter("phone");
         SQLiteDatabase db = getWritableDatabase();
-        String sql = "select * from "+TABLE_NAME_2+" ; ";
-        return db.rawQuery(sql,null);
+        String sql = "select * from "+TABLE_NAME_2+" where "+COLUMN_NAME_3+" = " +phone+";";
+        Log.d(TAGlog, sql);
+        Cursor data = db.rawQuery(sql,null);
+        data.moveToFirst();
+        Log.d(TAGlog, data.getString(data.getColumnIndex("name")));
+        return data;
     }
     public long onInsertUser(ContentValues values){
         long id=0;
         try {
             SQLiteDatabase db = getWritableDatabase();
             id = db.insert(TABLE_NAME_2, null, values);
-            Log.d(TAGlog, String.format("inserted user with id: %d ", id));
+        //    Log.d(TAGlog, String.format("inserted user with id: %d ", id));
         }
         catch (Throwable t){Log.d(TAGlog,t.getMessage());}
         return  id;

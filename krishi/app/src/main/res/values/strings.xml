@@ -45,9 +45,13 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="minimum_length_req">Minimum length of this field should be 5 characters</string>
     <string name="error_field">Error in this field</string>
     <string name="pick_one">Who Are You?</string>
     <string name="user_registration_successful">User Registration Successful</string>
+    <string name="user_login_successful">User Login Successful</string>
+    <!-- Strings related to dashboard -->
+    <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="Button_Add_Item">Add Item to List</string>
+    <string name="dashboard">Dashboard</string>
 </resources>

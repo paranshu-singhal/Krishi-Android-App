@@ -19,9 +19,8 @@
         <provider
             android:name=".ContentClass"
             android:authorities="com.majors.paranshusinghal.krishi.phones"
-            android:exported="false">
+            android:exported="false"></provider>
 
-        </provider>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,6 +50,14 @@
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register" />
+        <activity
+            android:name=".DashboardActivity"
+            android:label="@string/title_activity_dashboard"
+            android:parentActivityName=".LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.majors.paranshusinghal.krishi.LoginActivity" />
+        </activity>
     </application>
 
 </manifest>

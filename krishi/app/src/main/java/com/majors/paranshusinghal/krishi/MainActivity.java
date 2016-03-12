@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         final ImageView newsImageView     = (ImageView)findViewById(R.id.newsImageView);
         final ImageView weatherImageView  = (ImageView)findViewById(R.id.weatherImageView);
         final ImageView cropListImageView = (ImageView)findViewById(R.id.cropListImageView);
-        final ImageView schemeImageView   = (ImageView)findViewById(R.id.schemesImageView);
+        //final ImageView schemeImageView   = (ImageView)findViewById(R.id.schemesImageView);
         final ImageView registerImageView = (ImageView)findViewById(R.id.registerImageView);
         newsImageView.post(new Runnable() {
             @Override
@@ -75,10 +75,10 @@ public class MainActivity extends AppCompatActivity {
                 scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
                 newsImageView.setImageBitmap(scaledBitmap);
 
-                resID = getResources().getIdentifier("hands_icon", "drawable", TAG);
-                unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
-                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
-                schemeImageView.setImageBitmap(scaledBitmap);
+                //resID = getResources().getIdentifier("hands_icon", "drawable", TAG);
+               // unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
+               // scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
+               // schemeImageView.setImageBitmap(scaledBitmap);
 
                 resID = getResources().getIdentifier("register_icon", "drawable", TAG);
                 unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);

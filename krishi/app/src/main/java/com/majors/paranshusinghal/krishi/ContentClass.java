@@ -4,26 +4,15 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 public class ContentClass extends ContentProvider{
 
-    private static final String TAGlog = "TAGlog";
-
-    private static final int Numbers = 1;
-    private static final int Users = 2;
-
-    private static String PROVIDER_NAME = "com.majors.paranshusinghal.krishi.phones";
-
-    private static final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-    static{
-        matcher.addURI(PROVIDER_NAME, "Numbers", Numbers);
-        matcher.addURI(PROVIDER_NAME, "Users", Users);
-    }
+    private static final String TAGlog = "myTAG";
     sqliteDB db;
 
     @Override
@@ -37,23 +26,30 @@ public class ContentClass extends ContentProvider{
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         long id=0;
-        switch (matcher.match(uri)){
-            case Numbers:
+        String path = uri.getPath();
+        Log.d(TAGlog,"insertPath: "+path);
+        switch (path){
+            case "/numbers":
                 id= db.onInsert(values);
-            case Users:
+                return ContentUris.withAppendedId(uri, id);
+            case "/users":
                 id= db.onInsertUser(values);
+                return ContentUris.withAppendedId(uri, id);
+            default:
+                return null;
         }
-        return ContentUris.withAppendedId(uri, id);
     }
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        switch (matcher.match(uri))
+        String path = uri.getPath();
+        Log.d(TAGlog,"queryPath: "+path);
+        switch (path)
         {
-            case Numbers:
+            case "/numbers":
                 return db.onQuery();
-            case Users:
-                return db.onQueryUser();
+            case "/users":
+                return db.onQueryUser(uri);
             default:
                 return null;
         }
@@ -62,7 +58,6 @@ public class ContentClass extends ContentProvider{
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         return 0;
     }
-    @Nullable
     @Override
     public String getType(Uri uri) {
         return null;

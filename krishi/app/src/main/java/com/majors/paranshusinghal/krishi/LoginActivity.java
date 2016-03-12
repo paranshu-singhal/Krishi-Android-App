@@ -27,6 +27,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -182,7 +183,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,ContentClass.uri,null,null,null,null);
+        String PROVIDER_NAME = "com.majors.paranshusinghal.krishi.phones";
+        Uri uri = Uri.parse("content://"+PROVIDER_NAME+"/numbers");
+        return new CursorLoader(this,uri,null,null,null,null);
     }
 
     @Override
@@ -205,7 +208,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, phonesCollection);
-        Log.d(TAGlog,phonesCollection.toString());
+        //Log.d(TAGlog,phonesCollection.toString());
         mEmailView.setAdapter(adapter);
     }
 
@@ -229,7 +232,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             String answer=null;
             try{
-                HttpURLConnection conn = (HttpURLConnection) (new URL("http://10.0.0.2/krishi/index2.php")).openConnection();
+                HttpURLConnection conn = (HttpURLConnection) (new URL("http://10.0.0.5/krishi/index.php")).openConnection();
                 conn.setConnectTimeout(15000);
                 conn.setReadTimeout(10000);
                 conn.setRequestMethod("POST");
@@ -267,37 +270,43 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected void onPostExecute(final String answer) {
+
+            String PROVIDER_NAME = "com.majors.paranshusinghal.krishi.phones";
+            Uri uriusers = Uri.parse("content://"+PROVIDER_NAME+"/numbers");
+
             mAuthTask = null;
-            Boolean success=false;
             showProgress(false);
             JSONObject json=null;
             try {
                 json = new JSONObject(answer);
                 if(json.getString("success").equals("1")){
-                    success=true;
                     ContentValues values = new ContentValues();
                     values.put("number", json.getJSONObject("user").getString("phone_no"));
-                    Uri uri = getContentResolver().insert(com.majors.paranshusinghal.krishi.ContentClass.uri,values);
+                    Uri uri = getContentResolver().insert(uriusers,values);
                     Log.d(TAGlog, uri.toString());
+
+                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.user_login_successful), Toast.LENGTH_SHORT).show();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("phone", mPhone);
+                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+                else {
+                    try {
+                        mPasswordView.setError(json.getString("error_msg"));
+                        mPasswordView.requestFocus();
+                    }
+                    catch (Throwable t){
+                        t.printStackTrace();
+                        Log.d(TAGlog, t.getMessage());
+                    }
                 }
             }
             catch (Throwable t){
                 t.printStackTrace();
                 Log.d(TAGlog, t.getMessage());
-            }
-            if (success) {
-                //Todo: successful login action here
-                finish();
-
-            } else {
-                try {
-                    mPasswordView.setError(json.getString("error_msg"));
-                    mPasswordView.requestFocus();
-                }
-                catch (Throwable t){
-                    t.printStackTrace();
-                    Log.d(TAGlog, t.getMessage());
-                }
             }
         }
 
