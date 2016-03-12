@@ -53,36 +53,43 @@ public class MainActivity extends AppCompatActivity {
         final ImageView weatherImageView  = (ImageView)findViewById(R.id.weatherImageView);
         final ImageView cropListImageView = (ImageView)findViewById(R.id.cropListImageView);
         final ImageView schemeImageView   = (ImageView)findViewById(R.id.schemesImageView);
+        final ImageView registerImageView = (ImageView)findViewById(R.id.registerImageView);
         newsImageView.post(new Runnable() {
             @Override
             public void run() {
                 int ht = newsImageView.getMeasuredHeight();
                 int wd = newsImageView.getMeasuredWidth();
-                int newsResID = getResources().getIdentifier("news_icon", "drawable", TAG);
-                int weatherResID = getResources().getIdentifier("weather_icon", "drawable", TAG);
-                int cropListResID = getResources().getIdentifier("plant_icon", "drawable", TAG);
 
-                Bitmap weatherUnscaledBitmap = BitmapFactory.decodeResource(getResources(), weatherResID);
-                Bitmap cropListUnscaledBitmap = BitmapFactory.decodeResource(getResources(), cropListResID);
-                Bitmap newsUnscaledBitmap = BitmapFactory.decodeResource(getResources(), newsResID);
-
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(weatherUnscaledBitmap, wd, ht, true);
+                int resID = getResources().getIdentifier("weather_icon", "drawable", TAG);
+                Bitmap unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
                 weatherImageView.setImageBitmap(scaledBitmap);
-                scaledBitmap = Bitmap.createScaledBitmap(cropListUnscaledBitmap, wd, ht, true);
+
+                resID = getResources().getIdentifier("plant_icon", "drawable", TAG);
+                unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
                 cropListImageView.setImageBitmap(scaledBitmap);
-                scaledBitmap = Bitmap.createScaledBitmap(newsUnscaledBitmap, wd, ht, true);
+
+                resID = getResources().getIdentifier("news_icon", "drawable", TAG);
+                unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
                 newsImageView.setImageBitmap(scaledBitmap);
 
-                int resID = getResources().getIdentifier("hands_icon", "drawable", TAG);
-                Bitmap unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
+                resID = getResources().getIdentifier("hands_icon", "drawable", TAG);
+                unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
                 scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
                 schemeImageView.setImageBitmap(scaledBitmap);
+
+                resID = getResources().getIdentifier("register_icon", "drawable", TAG);
+                unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
+                registerImageView.setImageBitmap(scaledBitmap);
+
 
             }
         });
 
     }
-
     public void onClickWthr(View view){
 
         Intent intent = new Intent(this, MapsActivity.class);
@@ -100,6 +107,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onClickScheme(View view){
 
+    }
+    public void onClickRegister(View view){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager

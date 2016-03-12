@@ -16,6 +16,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:name=".ContentClass"
+            android:authorities="com.majors.paranshusinghal.krishi.phones"
+            android:exported="false">
+
+        </provider>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +44,13 @@
         <activity
             android:name=".newsActivity"
             android:label="@string/title_activity_news" />
-        <activity android:name=".web_view"></activity>
+        <activity android:name=".web_view" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity
+            android:name=".RegisterActivity"
+            android:label="@string/title_activity_register" />
     </application>
 
 </manifest>

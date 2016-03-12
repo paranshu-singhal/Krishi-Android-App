@@ -2,6 +2,7 @@ package com.majors.paranshusinghal.krishi;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -56,15 +57,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.net.ssl.SSLEngineResult;
-
 public class MapsActivity extends Activity implements
         ConnectionCallbacks,
         OnConnectionFailedListener,
         ResultCallback<LocationSettingsResult>,
         OnMapReadyCallback {
 
-    private GoogleMap mMap;
     protected GoogleApiClient mGoogleApiClient;
     protected Location mLastLocation;
     protected static final String TAG = "MapsActivity";
@@ -76,8 +74,6 @@ public class MapsActivity extends Activity implements
     protected static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     private static final String TAGlog = "myTAG";
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,27 +81,7 @@ public class MapsActivity extends Activity implements
         progressBar = (ProgressBar)findViewById(R.id.maps_progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
-        File fileWeatherCache = new File(getExternalCacheDir(), "weatherCache");
-        if(isNetworkAvailable()){
-            buildGoogleApiClient();
-        }
-        else if(fileWeatherCache.exists()){
-            ListView listView = (ListView)findViewById(R.id.listWeather);
-            try {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileWeatherCache));
-                List<custom_raw_weather_holderClass> list = convert2List(new JSONArray((String) ois.readObject()));
-                custom_row_weather_adaptor adaptor = new custom_row_weather_adaptor(MapsActivity.this, R.layout.custom_row_weather, list);
-                listView.setAdapter(adaptor);
-            }
-            catch (Throwable t){
-                Log.d(TAGlog, t.getMessage());
-                t.printStackTrace();
-            }
-        }
-        else{
-            Toast.makeText(MapsActivity.this, "Please check network settings", Toast.LENGTH_LONG).show();
-            MapsActivity.this.finish();
-        }
+        buildGoogleApiClient();
     }
     @Override
     protected void onStart(){
@@ -217,51 +193,60 @@ public class MapsActivity extends Activity implements
         result.setResultCallback(this);
     }
     public void getLocation(){
-
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        //if(isOnline()) {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+       // }
+       /*
+        else{
+            SharedPreferences sharedPref =MapsActivity.this.getPreferences(Context.MODE_PRIVATE);
+            mLastLocation.setLatitude(Double.parseDouble(sharedPref.getString("latitude", "0")));
+            mLastLocation.setLongitude(Double.parseDouble(sharedPref.getString("longitude", "0")));
+        }
+        */
         if (mLastLocation != null) {
             MapFragment map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map));
             map.getMapAsync(this);
         } else {
             Toast.makeText(this, R.string.no_location_detected, Toast.LENGTH_LONG).show();
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getLocation();
-                }
-            },3000);
         }
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
         LatLng  sydney = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Current location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+        googleMap.addMarker(new MarkerOptions().position(sydney).title("Current location"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+
+        SharedPreferences sharedPref = MapsActivity.this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("latitude", String.format("%f",mLastLocation.getLatitude()));
+        editor.putString("longitude", String.format("%f", mLastLocation.getLongitude()));
+        editor.apply();
+
         weatherForecast();
     }
-    public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
     public void weatherForecast() {
+        progressBar.setVisibility(View.GONE);
+        File fileWeatherCache = new File(getExternalCacheDir(), "weatherCache");
         if(isOnline()){
      //       Toast.makeText(this, "Connected to network", Toast.LENGTH_LONG).show();
         afterConn();}
+        else if(fileWeatherCache.exists()){
+            ListView listView = (ListView)findViewById(R.id.listWeather);
+            try {
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileWeatherCache));
+                List<custom_raw_weather_holderClass> list = convert2List(new JSONArray((String) ois.readObject()));
+                custom_row_weather_adaptor adaptor = new custom_row_weather_adaptor(MapsActivity.this, R.layout.custom_row_weather, list);
+                listView.setAdapter(adaptor);
+            }
+            catch (Throwable t){
+                Log.d(TAGlog, t.getMessage());
+                t.printStackTrace();
+            }
+        }
         else{
-            Toast.makeText(this, "Please check network settings", Toast.LENGTH_LONG).show();
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    weatherForecast();
-                }
-            }, 2000);
+            Toast.makeText(MapsActivity.this, "Please check network settings", Toast.LENGTH_LONG).show();
+            MapsActivity.this.finish();
         }
     }
 
@@ -309,7 +294,7 @@ public class MapsActivity extends Activity implements
         protected void onPostExecute(String s) {
             progressBar.setVisibility(View.GONE);
             JSONObject json;
-            List list = new ArrayList();
+            List<custom_raw_weather_holderClass> list = new ArrayList<>();
             try{
                 json = new JSONObject(s);
                 JSONArray jsonArray = json.getJSONArray("list");
@@ -380,11 +365,10 @@ public class MapsActivity extends Activity implements
         }
         return list;
     }
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }
 

@@ -53,7 +53,7 @@ public class newsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
-        /*
+
         final ImageView newsImageView = (ImageView) findViewById(R.id.news_activity_imageView);
         newsImageView.post(new Runnable() {
             @Override
@@ -66,7 +66,7 @@ public class newsActivity extends Activity {
                 newsImageView.setImageBitmap(scaledBitmap);
             }
         });
-        */
+
         progressBar = (ProgressBar) findViewById(R.id.news_progressBar);
         progressBar.setVisibility(View.GONE);
 
