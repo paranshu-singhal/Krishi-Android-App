@@ -14,18 +14,20 @@ public class ContentClass extends ContentProvider{
 
     private static final String TAGlog = "myTAG";
     sqliteDB db;
+    SellerDB sellerDB;
 
     @Override
     public boolean onCreate() {
 
         Context context = getContext();
         db = new sqliteDB(context);
+        sellerDB = new SellerDB(context);
         return true;
     }
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        long id=0;
+        long id;
         String path = uri.getPath();
         Log.d(TAGlog,"insertPath: "+path);
         switch (path){
@@ -34,6 +36,9 @@ public class ContentClass extends ContentProvider{
                 return ContentUris.withAppendedId(uri, id);
             case "/users":
                 id= db.onInsertUser(values);
+                return ContentUris.withAppendedId(uri, id);
+            case "/sellerList":
+                id=sellerDB.onInsert(values);
                 return ContentUris.withAppendedId(uri, id);
             default:
                 return null;
@@ -50,6 +55,8 @@ public class ContentClass extends ContentProvider{
                 return db.onQuery();
             case "/users":
                 return db.onQueryUser(uri);
+            case "/sellerList":
+                return sellerDB.onQuery();
             default:
                 return null;
         }

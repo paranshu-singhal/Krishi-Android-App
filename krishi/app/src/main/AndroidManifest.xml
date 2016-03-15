@@ -49,7 +49,12 @@
             android:label="@string/title_activity_login" />
         <activity
             android:name=".RegisterActivity"
-            android:label="@string/title_activity_register" />
+            android:label="@string/title_activity_register"
+            android:parentActivityName=".LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.majors.paranshusinghal.krishi.LoginActivity" />
+        </activity>
         <activity
             android:name=".DashboardActivity"
             android:label="@string/title_activity_dashboard"
@@ -58,6 +63,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.majors.paranshusinghal.krishi.LoginActivity" />
         </activity>
+
     </application>
 
 </manifest>

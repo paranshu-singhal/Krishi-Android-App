@@ -22,7 +22,6 @@ public class sqliteDB extends SQLiteOpenHelper{
     private static final String COLUMN_NAME_1 = "unique_id";
     private static final String COLUMN_NAME_2 = "name";
     private static final String COLUMN_NAME_3 = "phone_no";
-    private static final String COLUMN_NAME_4 = "password";
     private static final String COLUMN_NAME_5 = "address1";
     private static final String COLUMN_NAME_6 = "address2";
     private static final String COLUMN_NAME_7 = "state";
@@ -36,21 +35,6 @@ public class sqliteDB extends SQLiteOpenHelper{
         ContentValues val= new ContentValues();
         val.put(COLUMN_NAME_NUMBER, "8800359250");
         onInsert(val);
-        val.put(COLUMN_NAME_NUMBER, "9810162034");
-        onInsert(val);
-
-        ContentValues val2 = new ContentValues();
-        val2.put(COLUMN_NAME_1,"56dc0285198414.83539582");
-        val2.put(COLUMN_NAME_2,"Labhansh");
-        val2.put(COLUMN_NAME_3,"9876543211");
-        val2.put(COLUMN_NAME_4,"labhansh");
-        val2.put(COLUMN_NAME_5,"23, DLF");
-        val2.put(COLUMN_NAME_6,"Gurgaon");
-        val2.put(COLUMN_NAME_7,"Delhi");
-        val2.put(COLUMN_NAME_8,"India");
-        val2.put(COLUMN_NAME_9,"New Delhi");
-        val2.put(COLUMN_NAME_10,"farmer");
-        onInsertUser(val2);
     }
 
     @Override
@@ -64,7 +48,6 @@ public class sqliteDB extends SQLiteOpenHelper{
         String query2 = "CREATE TABLE "+ TABLE_NAME_2 + " ( " + COLUMN_NAME_1 + " TEXT PRIMARY KEY, "+
                 COLUMN_NAME_2 + " TEXT, "+
                 COLUMN_NAME_3 + " TEXT UNIQUE, "+
-                COLUMN_NAME_4 + " TEXT, "+
                 COLUMN_NAME_5 + " TEXT, "+
                 COLUMN_NAME_6 + " TEXT, "+
                 COLUMN_NAME_9 + " TEXT, "+
@@ -103,10 +86,10 @@ public class sqliteDB extends SQLiteOpenHelper{
         String phone = uri.getQueryParameter("phone");
         SQLiteDatabase db = getWritableDatabase();
         String sql = "select * from "+TABLE_NAME_2+" where "+COLUMN_NAME_3+" = " +phone+";";
-        Log.d(TAGlog, sql);
+        //Log.d(TAGlog, sql);
         Cursor data = db.rawQuery(sql,null);
         data.moveToFirst();
-        Log.d(TAGlog, data.getString(data.getColumnIndex("name")));
+        //Log.d(TAGlog, data.getString(data.getColumnIndex("name")));
         return data;
     }
     public long onInsertUser(ContentValues values){

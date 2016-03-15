@@ -26,6 +26,7 @@ import java.net.URLEncoder;
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String logTag = "myTAG";
+    private static final String TAGlog = "myTAG";
 
     protected EditText mPerson;
     protected EditText mPassword;
@@ -43,14 +44,14 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mPerson   = (EditText)findViewById(R.id.editTextPerson);
-        mPassword = (EditText)findViewById(R.id.editTextPassword);
-        mPhone    = (EditText)findViewById(R.id.editTextPhone);
-        mAddress1 = (EditText)findViewById(R.id.editTextAddress1);
-        mAddress2 = (EditText)findViewById(R.id.editTextAddress2);
-        mCity    = (EditText)findViewById(R.id.editTextCity);
-        mState    = (EditText)findViewById(R.id.editTextState);
-        mCountry  = (EditText)findViewById(R.id.editTextCountry);
+        mPerson = (EditText) findViewById(R.id.editTextPerson);
+        mPassword = (EditText) findViewById(R.id.editTextPassword);
+        mPhone = (EditText) findViewById(R.id.editTextPhone);
+        mAddress1 = (EditText) findViewById(R.id.editTextAddress1);
+        mAddress2 = (EditText) findViewById(R.id.editTextAddress2);
+        mCity = (EditText) findViewById(R.id.editTextCity);
+        mState = (EditText) findViewById(R.id.editTextState);
+        mCountry = (EditText) findViewById(R.id.editTextCountry);
 
         mPerson.setError(null);
         mPassword.setError(null);
@@ -62,7 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
         mCountry.setError(null);
 
         Bundle bundle = getIntent().getExtras();
-        final String tag =bundle.getString("tag");
+        final String tag = bundle.getString("tag");
         Log.d(logTag, tag);
 
         Button mSubmitButton = (Button) findViewById(R.id.buttonSubmit);
@@ -73,50 +74,53 @@ public class RegisterActivity extends AppCompatActivity {
                 boolean success = AttemptRegister(mPerson.getText().toString(), mPassword.getText().toString(), mPhone.getText().toString(),
                         mAddress1.getText().toString(), mAddress2.getText().toString(), mCity.getText().toString(), mState.getText().toString(), mCountry.getText().toString());
 
-                if(success) {
+                if (success) {
                     NewRegister reg = new NewRegister(mPerson.getText().toString(), mPassword.getText().toString(), mPhone.getText().toString(),
-                            mAddress1.getText().toString(), mAddress2.getText().toString(),mCity.getText().toString() ,mState.getText().toString(),  mCountryString,tag);
+                            mAddress1.getText().toString(), mAddress2.getText().toString(), mCity.getText().toString(), mState.getText().toString(), mCountryString, tag);
                     reg.execute((Void) null);
                 }
             }
         });
     }
 
-    private boolean AttemptRegister(String name, String password, String phone, String address1, String address2,String city ,String state, String country){
-        if(name.length()<=0){
+    private boolean AttemptRegister(String name, String password, String phone, String address1, String address2, String city, String state, String country) {
+        if (name.length() <= 0) {
             mPerson.setError(getResources().getString(R.string.error_field_required));
             return false;
         }
-        if(phone.length()!=10){
+        if (phone.length() != 10) {
             mPhone.setError(getResources().getString(R.string.error_field));
             return false;
         }
-        if(password.length()<5){
+        if (password.length() < 5) {
             mPassword.setError(getResources().getString(R.string.minimum_length_req));
             return false;
         }
-        if(address1.length()<=0){
+        if (address1.length() <= 0) {
             mAddress1.setError(getResources().getString(R.string.error_field_required));
             return false;
         }
-        if(address2.length()<=0){
+        if (address2.length() <= 0) {
             mAddress2.setError(getResources().getString(R.string.error_field_required));
             return false;
         }
-        if(city.length()<=0){
+        if (city.length() <= 0) {
             mCity.setError(getResources().getString(R.string.error_field_required));
             return false;
         }
-        if(state.length()<=0){
+        if (state.length() <= 0) {
             mState.setError(getResources().getString(R.string.error_field_required));
             return false;
         }
-        if(country.length()<=0){ mCountryString = "India"; }
-        else{ mCountryString = country; }
+        if (country.length() <= 0) {
+            mCountryString = "India";
+        } else {
+            mCountryString = country;
+        }
         return true;
     }
 
-    private class NewRegister extends AsyncTask<Void,Void,String>{
+    private class NewRegister extends AsyncTask<Void, Void, String> {
 
         private String name;
         private String password;
@@ -137,15 +141,15 @@ public class RegisterActivity extends AppCompatActivity {
             this.state = state;
             this.country = country;
             this.tag = tag;
-            this.City=city;
+            this.City = city;
         }
 
         @Override
         protected String doInBackground(Void... params) {
-
+            String localhost = getResources().getString(R.string.localhost);
             String answer = null;
             try {
-                HttpURLConnection conn = (HttpURLConnection) (new URL("http://10.0.0.5/krishi/index.php")).openConnection();
+                HttpURLConnection conn = (HttpURLConnection) (new URL(localhost + "/krishi/index.php")).openConnection();
                 conn.setConnectTimeout(15000);
                 conn.setReadTimeout(10000);
                 conn.setRequestMethod("POST");
@@ -185,40 +189,64 @@ public class RegisterActivity extends AppCompatActivity {
             }
             return answer;
         }
+
         @Override
         protected void onPostExecute(String answer) {
             Log.d(logTag, answer);
             try {
                 JSONObject json = new JSONObject(answer);
-                if(json.getString("success").equals("1")){
-                    ContentValues values = new ContentValues();
+                if (json.getString("success").equals("1")) {
 
-                    values.put("unique_id", json.getJSONObject("user").getString("uid"));
-                    values.put("name", name);
-                    values.put("phone_no", phone);
-                    values.put("password", password);
-                    values.put("address1", address1);
-                    values.put("address2", address2);
-                    values.put("city", City);
-                    values.put("state", state);
-                    values.put("country", country);
-                    values.put("tag", tag);
+                    addNumberSql();
+                    addUserSql(json);
 
-                    String PROVIDER_NAME = "com.majors.paranshusinghal.krishi.phones";
-                    Uri uriusers = Uri.parse("content://"+PROVIDER_NAME+"/users");
-                    Uri uri = getContentResolver().insert(uriusers,values);
-                    Log.d(logTag, uri.toString());
                     Toast.makeText(RegisterActivity.this, getResources().getString(R.string.user_registration_successful), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
-                }
-                else{
+                } else {
                     Snackbar.make(mPerson, json.getString("error_msg"), Snackbar.LENGTH_SHORT).show();
                 }
-            }
-            catch (Throwable t){
+            } catch (Throwable t) {
                 t.printStackTrace();
                 Log.d(logTag, t.getMessage());
+            }
+        }
+
+        public void addUserSql(JSONObject json) {
+            ContentValues values = new ContentValues();
+            String PROVIDER_NAME = "com.majors.paranshusinghal.krishi.phones";
+            Uri uriusers = Uri.parse("content://" + PROVIDER_NAME + "/users");
+            try {
+                values.put("unique_id", json.getJSONObject("user").getString("uid"));
+                values.put("name", name);
+                values.put("phone_no", phone);
+                values.put("password", password);
+                values.put("address1", address1);
+                values.put("address2", address2);
+                values.put("city", City);
+                values.put("state", state);
+                values.put("country", country);
+                values.put("tag", tag);
+                Uri uri = getContentResolver().insert(uriusers, values);
+                Log.d(logTag, uri.toString());
+            }
+            catch (Throwable t){
+                Log.d(TAGlog, t.getMessage());
+                t.printStackTrace();
+            }
+        }
+
+        public void addNumberSql() {
+            String PROVIDER_NAME = "com.majors.paranshusinghal.krishi.phones";
+            Uri uri = Uri.parse("content://" + PROVIDER_NAME + "/numbers");
+            ContentValues values = new ContentValues();
+            try{
+                values.put("number", phone);
+                getContentResolver().insert(uri, values);
+            }
+            catch (Throwable t){
+                Log.d(TAGlog, t.getMessage());
+                t.printStackTrace();
             }
         }
     }

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Krishi</string>
+    <string name="localhost">http://10.0.0.8</string>
     <string name="lat_txt">0</string>
     <string name="long_txt">0</string>
     <string name="latitude">Lat</string>
@@ -54,4 +55,23 @@
     <string name="title_activity_dashboard">DashboardActivity</string>
     <string name="Button_Add_Item">Add Item to List</string>
     <string name="dashboard">Dashboard</string>
+
+    <!-- Strings related to DialogLayout -->
+
+    <string name="total_produce">Volume of produce(in Quintals)</string>
+    <string name="crop_to_sell">Name of Crop</string>
+    <string name="price_quintal">Minimum Price per Quintal</string>
+    <string name="min_sell_vol">Minimum Volume to Sell per Buyer</string>
+    <string-array name="crop_list">
+        <item>Paddy</item>
+        <item>Maize</item>
+        <item>SugerCane</item>
+        <item>Potato</item>
+        <item>Tomato</item>
+        <item>Wheat</item>
+    </string-array>
+    <string name="add_item">Add Item</string>
+    <string name="cancel">Cancel</string>
+    <string name="totProduceError">This value should be greater than 0</string>
+    <string name="FromListError">This value should be from the list</string>
 </resources>

@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String TAG = "com.majors.paranshusinghal.krishi";
     private static final String TAGlog = "myTAG";
 
-   private UserLoginTask mAuthTask = null;
+    private UserLoginTask mAuthTask = null;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return (text.matches("[0-9]+") && text.length()==10);
     }
     private boolean isPasswordValid(String password) {
-        return password.length() > 5;
+        return password.length() >= 5;
     }
 
     /**
@@ -230,9 +230,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected String doInBackground(Void... params) {
 
+            String localhost = getResources().getString(R.string.localhost);
             String answer=null;
             try{
-                HttpURLConnection conn = (HttpURLConnection) (new URL("http://10.0.0.5/krishi/index.php")).openConnection();
+                HttpURLConnection conn = (HttpURLConnection) (new URL(localhost+"/krishi/index.php")).openConnection();
                 conn.setConnectTimeout(15000);
                 conn.setReadTimeout(10000);
                 conn.setRequestMethod("POST");
@@ -272,18 +273,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onPostExecute(final String answer) {
 
             String PROVIDER_NAME = "com.majors.paranshusinghal.krishi.phones";
-            Uri uriusers = Uri.parse("content://"+PROVIDER_NAME+"/numbers");
-
             mAuthTask = null;
             showProgress(false);
-            JSONObject json=null;
+            JSONObject json;
             try {
                 json = new JSONObject(answer);
                 if(json.getString("success").equals("1")){
                     ContentValues values = new ContentValues();
                     values.put("number", json.getJSONObject("user").getString("phone_no"));
-                    Uri uri = getContentResolver().insert(uriusers,values);
-                    Log.d(TAGlog, uri.toString());
+                    Uri uri = Uri.parse("content://"+PROVIDER_NAME+"/numbers");
+                    getContentResolver().insert(uri,values);
+
+                    addUserSqlite(json);
+                    //Log.d(TAGlog, uri.toString());
 
                     Toast.makeText(LoginActivity.this, getResources().getString(R.string.user_login_successful), Toast.LENGTH_SHORT).show();
 
@@ -332,6 +334,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             startActivity(intent);
                         }
                     }).show();
+    }
+
+    public void addUserSqlite(JSONObject json){
+        String PROVIDER_NAME = "com.majors.paranshusinghal.krishi.phones";
+        try {
+            json = json.getJSONObject("user");
+            ContentValues vals = new ContentValues();
+            vals.put("unique_id", json.getString("uid"));
+            vals.put("name", json.getString("name"));
+            vals.put("phone_no", json.getString("phone_no"));
+            vals.put("address1", json.getString("address1"));
+            vals.put("address2", json.getString("address2"));
+            vals.put("city", json.getString("city"));
+            vals.put("state", json.getString("state"));
+            vals.put("country", json.getString("country"));
+            vals.put("tag", json.getString("tag"));
+
+            Uri uriusers = Uri.parse("content://"+PROVIDER_NAME+"/users");
+            getContentResolver().insert(uriusers,vals);
+        }
+        catch (Throwable t){
+            Log.d(TAGlog, t.getMessage());
+            t.printStackTrace();
+        }
     }
 }
 
