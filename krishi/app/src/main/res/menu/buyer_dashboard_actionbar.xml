@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/deleteProfileButton"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/delete_profile"
+        android:visible="true"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/UpdateProfileButton"
+        android:icon="@drawable/change_profile"
+        android:title="@string/change_profile"
+        android:visible="true"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/SearchButton"
+        android:icon="@drawable/searchtool"
+        android:title="@string/search_item"
+        android:visible="true"
+        app:showAsAction="ifRoom"/>
+
+</menu>

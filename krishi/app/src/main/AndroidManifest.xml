@@ -19,7 +19,7 @@
         <provider
             android:name=".ContentClass"
             android:authorities="com.majors.paranshusinghal.krishi.phones"
-            android:exported="false"></provider>
+            android:exported="false" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -36,17 +36,38 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
+
         <activity
-            android:name=".scrollingActivity1"
-            android:label="@string/title_activity_scrolling1" />
-        <activity android:name=".cropList" />
+            android:name=".TabActivity"
+            android:label="@string/title_activity_scrolling1"
+            android:parentActivityName=".cropList"
+            android:theme="@style/AppTheme.NoActionBar">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.majors.paranshusinghal.krishi.cropList" />
+        </activity>
+
         <activity
-            android:name=".newsActivity"
+            android:name=".cropList"
+            android:label="@string/title_activity_cropList"
+            android:parentActivityName=".MainActivity" >
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.majors.paranshusinghal.krishi.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".NewsActivity"
             android:label="@string/title_activity_news" />
         <activity android:name=".web_view" />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.majors.paranshusinghal.krishi.MainActivity" />
+        </activity>
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
@@ -56,14 +77,38 @@
                 android:value="com.majors.paranshusinghal.krishi.LoginActivity" />
         </activity>
         <activity
-            android:name=".DashboardActivity"
+            android:name=".SellerDashboardActivity"
             android:label="@string/title_activity_dashboard"
             android:parentActivityName=".LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.majors.paranshusinghal.krishi.LoginActivity" />
         </activity>
+        <activity
+            android:name=".BuyerSearchResult"
+            android:label="@string/title_activity_buyer_dashboard"
+            android:parentActivityName=".BuyerDashboardActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.majors.paranshusinghal.krishi.BuyerDashboardActivity" />
+        </activity>
+        <activity
+        android:name=".BuyerDashboardActivity"
+        android:label="@string/title_activity_buyer_dashboard"
+        android:parentActivityName=".LoginActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.majors.paranshusinghal.krishi.LoginActivity" />
+        </activity>
 
+        <activity
+            android:name=".MinimumSupportPrice"
+            android:label="@string/title_activity_msp"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.majors.paranshusinghal.krishi.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

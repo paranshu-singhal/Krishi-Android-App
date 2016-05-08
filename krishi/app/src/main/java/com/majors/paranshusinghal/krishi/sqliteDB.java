@@ -71,36 +71,30 @@ public class sqliteDB extends SQLiteOpenHelper{
         return db.rawQuery(sql,null);
     }
     public long onInsert(ContentValues values){
-        long id=0;
-        try {
-            SQLiteDatabase db = getWritableDatabase();
-            id = db.insert(TABLE_NAME, null, values);
-        //    Log.d(TAGlog, String.format("inserted with id: %d ", id));
-        }
-        catch (Throwable t){Log.d(TAGlog,t.getMessage());}
-        return  id;
+        SQLiteDatabase db = getWritableDatabase();
+        return db.insert(TABLE_NAME, null, values);
     }
 
     public Cursor onQueryUser(Uri uri){
-
         String phone = uri.getQueryParameter("phone");
         SQLiteDatabase db = getWritableDatabase();
         String sql = "select * from "+TABLE_NAME_2+" where "+COLUMN_NAME_3+" = " +phone+";";
-        //Log.d(TAGlog, sql);
         Cursor data = db.rawQuery(sql,null);
         data.moveToFirst();
-        //Log.d(TAGlog, data.getString(data.getColumnIndex("name")));
         return data;
     }
     public long onInsertUser(ContentValues values){
-        long id=0;
-        try {
-            SQLiteDatabase db = getWritableDatabase();
-            id = db.insert(TABLE_NAME_2, null, values);
-        //    Log.d(TAGlog, String.format("inserted user with id: %d ", id));
-        }
-        catch (Throwable t){Log.d(TAGlog,t.getMessage());}
-        return  id;
+        SQLiteDatabase db = getWritableDatabase();
+        return db.insert(TABLE_NAME_2, null, values);
     }
-
+    public int onDelete(Uri uri){
+        String phone[]={uri.getQueryParameter("phone")};
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_NAME, COLUMN_NAME_NUMBER + "=?", phone);
+        return db.delete(TABLE_NAME_2, COLUMN_NAME_3+"=?", phone);
+    }
+    public int onUpdate(ContentValues values, String whereClause, String[] whereArgs){
+        SQLiteDatabase db = getWritableDatabase();
+        return  db.update(TABLE_NAME_2, values, whereClause, whereArgs);
+    }
 }

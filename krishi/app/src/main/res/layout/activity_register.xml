@@ -8,6 +8,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.majors.paranshusinghal.testapp.RegisterActivity">
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,6 +36,10 @@
                     android:id="@+id/imageViewPerson"
                     android:src="@drawable/black"
                     android:layout_marginTop="6dp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -42,6 +48,8 @@
                     android:ems="15"
                     android:id="@+id/editTextPerson"
                     android:layout_marginLeft="10dp" />
+                </android.support.design.widget.TextInputLayout>
+
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
@@ -54,6 +62,9 @@
                     android:id="@+id/imageViewPhone"
                     android:src="@drawable/technology"
                     android:layout_marginTop="6dp" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -64,6 +75,7 @@
                     android:id="@+id/editTextPhone"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
@@ -77,6 +89,10 @@
                     android:src="@drawable/password"
                     android:layout_marginTop="6dp" />
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -86,6 +102,7 @@
                     android:id="@+id/editTextPassword"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
@@ -99,6 +116,9 @@
                     android:src="@drawable/location"
                     android:layout_marginTop="6dp" />
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -108,6 +128,7 @@
                     android:id="@+id/editTextAddress1"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"/>
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
@@ -120,6 +141,9 @@
                     android:id="@+id/imageViewAddress2"
                     android:src="@drawable/location"
                     android:layout_marginTop="6dp" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -130,6 +154,7 @@
                     android:id="@+id/editTextAddress2"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"/>
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
@@ -143,6 +168,9 @@
                     android:src="@drawable/location"
                     android:layout_marginTop="6dp" />
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -152,6 +180,7 @@
                     android:id="@+id/editTextCity"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"/>
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
@@ -164,6 +193,9 @@
                     android:id="@+id/imageViewState"
                     android:src="@drawable/location"
                     android:layout_marginTop="6dp" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -174,6 +206,7 @@
                     android:id="@+id/editTextState"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"/>
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
@@ -186,6 +219,9 @@
                     android:id="@+id/imageViewCountry"
                     android:src="@drawable/location"
                     android:layout_marginTop="6dp" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -196,6 +232,7 @@
                     android:id="@+id/editTextCountry"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"/>
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <Button

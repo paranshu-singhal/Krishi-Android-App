@@ -8,18 +8,17 @@
     tools:context="com.majors.paranshusinghal.krishi.MainActivity"
     android:id="@+id/main_layout"
     tools:ignore="contentDescription">
+
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentTop="true">
     <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
         android:paddingBottom="80dp">
         <LinearLayout
             android:layout_height="wrap_content"
@@ -36,8 +35,7 @@
             <ImageView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:id="@+id/weatherImageView"
-                />
+                android:id="@+id/weatherImageView" />
             <Button
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
@@ -87,8 +85,7 @@
             <ImageView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:id="@+id/newsImageView"
-                />
+                android:id="@+id/newsImageView" />
             <Button
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
@@ -119,6 +116,31 @@
                 android:text="@string/register_btn"
                 android:id="@+id/registerButton"
                 android:onClick="onClickRegister"
+                android:clickable="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:onClick="onClickMsp"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp">
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:id="@+id/mspImageView" />
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/title_activity_msp"
+                android:id="@+id/mspButton"
+                android:onClick="onClickMsp"
                 android:clickable="true" />
         </LinearLayout>
     </GridLayout>

@@ -248,7 +248,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 dataOutputStream.flush();
                 dataOutputStream.close();
 
-                Log.d(TAGlog, String.format("code %d",conn.getResponseCode()));
+                //Log.d(TAGlog, String.format("code %d",conn.getResponseCode()));
 
                 StringBuilder buffer = new StringBuilder();
                 InputStream is = conn.getInputStream();
@@ -272,6 +272,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected void onPostExecute(final String answer) {
 
+            //Log.d(TAGlog, answer);
             String PROVIDER_NAME = "com.majors.paranshusinghal.krishi.phones";
             mAuthTask = null;
             showProgress(false);
@@ -291,7 +292,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                     Bundle bundle = new Bundle();
                     bundle.putString("phone", mPhone);
-                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                    Intent intent;
+                    switch (json.getJSONObject("user").getString("tag"))
+                    {
+                        case "Buyer":
+                            intent = new Intent(LoginActivity.this, BuyerDashboardActivity.class);
+                            break;
+                        default:
+                            intent = new Intent(LoginActivity.this, SellerDashboardActivity.class);
+                    }
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
@@ -330,6 +339,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             Bundle bundle = new Bundle();
                             bundle.putString("tag", array[which]);
                             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                            intent.putExtra("callingActivity", "LoginActivity");
                             intent.putExtras(bundle);
                             startActivity(intent);
                         }

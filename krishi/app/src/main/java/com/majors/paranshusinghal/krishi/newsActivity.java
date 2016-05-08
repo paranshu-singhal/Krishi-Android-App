@@ -1,118 +1,65 @@
 package com.majors.paranshusinghal.krishi;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Activity;
-import android.support.annotation.NonNull;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.Xml;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
+import android.view.animation.AnimationUtils;
+import android.support.v7.widget.Toolbar;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
-public class newsActivity extends Activity {
+
+public class NewsActivity extends Activity {
 
     private static final String TAG = "com.majors.paranshusinghal.krishi";
     private static final String TAGlog = "myTAG";
-    ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
 
-        final ImageView newsImageView = (ImageView) findViewById(R.id.news_activity_imageView);
-        newsImageView.post(new Runnable() {
+        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
+        collapsingToolbar.setExpandedTitleColor(Color.WHITE);
+        collapsingToolbar.setTitle("Current News");
+
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final FloatingActionButton floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                int ht = newsImageView.getMeasuredHeight();
-                int wd = newsImageView.getMeasuredWidth();
-                int resID = getResources().getIdentifier("flat_hulk", "drawable", TAG);
-                Bitmap unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
-                newsImageView.setImageBitmap(scaledBitmap);
+            public void onClick(View v) {
+                floatingActionButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_rotate));
             }
         });
 
-        progressBar = (ProgressBar) findViewById(R.id.news_progressBar);
-        progressBar.setVisibility(View.GONE);
-
-        ListView news_list = (ListView) findViewById(R.id.news_activity_listView);
-        File fileNewsCache = new File(getExternalCacheDir(), "newsCache");
-        if (isNetworkAvailable()) {
-            Log.d(TAGlog,"online");
-            DownloadXmlTask task = new DownloadXmlTask();
-            task.execute();
-        } else if(fileNewsCache.exists()){
-            Log.d(TAGlog,"offline");
-            try {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileNewsCache));
-                //long size = ois.readInt();
-                List<newselement> list = convert2List(new JSONArray((String) ois.readObject()));
-                customNewsAdaptor adaptor = new customNewsAdaptor(newsActivity.this, R.layout.listview_raw, list);
-                news_list.setAdapter(adaptor);
-            } catch (Throwable t) {
-                Log.d(TAGlog, t.getMessage());
-                t.printStackTrace();
-            }
-        }else{
-            Toast.makeText(newsActivity.this, "Please check network settings", Toast.LENGTH_LONG).show();
-            newsActivity.this.finish();
-        }
-        news_list.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        newselement ns = (newselement) parent.getItemAtPosition(position);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("link", ns.getLink());
-                        Intent intent = new Intent(newsActivity.this, web_view.class);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }
-                }
-        );
+        DownloadXmlTask task = new DownloadXmlTask();
+        task.execute();
     }
 
     private class DownloadXmlTask extends AsyncTask<Void, Void, List<newselement>> {
-
-        @Override
-        protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
-        }
 
         @Override
         protected List<newselement> doInBackground(Void... urls) {
@@ -123,8 +70,8 @@ public class newsActivity extends Activity {
                 String urlString = "http://economictimes.indiatimes.com/news/economy/agriculture/rssfeeds/1202099874.cms";
                 URL url = new URL(urlString);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(10000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(15000);
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
                 conn.connect();
@@ -148,17 +95,14 @@ public class newsActivity extends Activity {
 
         @Override
         protected void onPostExecute(List<newselement> list) {
-            progressBar.setVisibility(View.GONE);
-            Log.d(TAGlog, "onPostExecute");
-            try {
-                ListView listView = (ListView) findViewById(R.id.news_activity_listView);
-                customNewsAdaptor adaptor = new customNewsAdaptor(newsActivity.this, R.layout.listview_raw, list);
-                listView.setAdapter(adaptor);
 
-                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getExternalCacheDir(), "newsCache")));
-                JSONArray array = convert2JSON(list);
-             //   oos.writeInt(array.length());
-                oos.writeObject(array.toString());
+            //Log.d(TAGlog, "onPostExecute");
+            //Toast.makeText(getApplicationContext(), "onPostExecute", Toast.LENGTH_SHORT).show();
+            try {
+                RecyclerView news_list = (RecyclerView) findViewById(R.id.recyclerview);
+                NewsAdaptor adaptor1 = new NewsAdaptor(list, NewsActivity.this);
+                news_list.setAdapter(adaptor1);
+                news_list.setLayoutManager(new LinearLayoutManager(NewsActivity.this));
             } catch (Throwable t) {
                 Log.d(TAGlog, t.getMessage());
                 t.printStackTrace();
@@ -226,17 +170,21 @@ public class newsActivity extends Activity {
                 if (parser.getEventType() != XmlPullParser.START_TAG) {
                     continue;
                 }
-                String name = parser.getName();
-                if (name.equals("title")) {
-                    title = readTitle(parser);
-                } else if (name.equals("description")) {
-                    summary = readSummary(parser);
-                } else if (name.equals("link")) {
-                    link = readLink(parser);
-                } else if (name.equals("pubDate")) {
-                    pubDate = readDate(parser);
-                } else {
-                    skip(parser);
+                switch (parser.getName()) {
+                    case "title":
+                        title = readTitle(parser);
+                        break;
+                    case "description":
+                        summary = readSummary(parser);
+                        break;
+                    case "link":
+                        link = readLink(parser);
+                        break;
+                    case "pubDate":
+                        pubDate = readDate(parser);
+                        break;
+                    default:
+                        skip(parser);
                 }
             }
             return new newselement(title, summary, link, pubDate);
@@ -344,4 +292,5 @@ public class newsActivity extends Activity {
         }
         return list;
     }
+
 }

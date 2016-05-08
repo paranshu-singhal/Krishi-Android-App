@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG ="com.majors.paranshusinghal.krishi";
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         final ImageView newsImageView     = (ImageView)findViewById(R.id.newsImageView);
         final ImageView weatherImageView  = (ImageView)findViewById(R.id.weatherImageView);
         final ImageView cropListImageView = (ImageView)findViewById(R.id.cropListImageView);
-        //final ImageView schemeImageView   = (ImageView)findViewById(R.id.schemesImageView);
+        final ImageView mspImageView   = (ImageView)findViewById(R.id.mspImageView);
         final ImageView registerImageView = (ImageView)findViewById(R.id.registerImageView);
         newsImageView.post(new Runnable() {
             @Override
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 int ht = newsImageView.getMeasuredHeight();
                 int wd = newsImageView.getMeasuredWidth();
 
-                int resID = getResources().getIdentifier("weather_icon", "drawable", TAG);
+                int resID = getResources().getIdentifier("weather_icon1", "drawable", TAG);
                 Bitmap unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
                 Bitmap scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
                 weatherImageView.setImageBitmap(scaledBitmap);
@@ -75,10 +76,10 @@ public class MainActivity extends AppCompatActivity {
                 scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
                 newsImageView.setImageBitmap(scaledBitmap);
 
-                //resID = getResources().getIdentifier("hands_icon", "drawable", TAG);
-               // unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
-               // scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
-               // schemeImageView.setImageBitmap(scaledBitmap);
+                resID = getResources().getIdentifier("hands_icon", "drawable", TAG);
+                unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
+                mspImageView.setImageBitmap(scaledBitmap);
 
                 resID = getResources().getIdentifier("register_icon", "drawable", TAG);
                 unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
@@ -97,19 +98,19 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onClickNews(View view){
 
-        Intent intent = new Intent(this, newsActivity.class);
+        Intent intent = new Intent(this, NewsActivity.class);
         startActivity(intent);
     }
     public void onClickCrop(View view){
-
         Intent intent = new Intent(this, cropList.class);
         startActivity(intent);
     }
-    public void onClickScheme(View view){
-
-    }
     public void onClickRegister(View view){
         Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+    public void onClickMsp(View view){
+        Intent intent = new Intent(this, MinimumSupportPrice.class);
         startActivity(intent);
     }
     private boolean isNetworkAvailable() {

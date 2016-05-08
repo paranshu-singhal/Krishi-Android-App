@@ -5,104 +5,22 @@
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.majors.paranshusinghal.krishi.cropList">
+
+
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:id="@+id/crop_list_imageView"
-        android:layout_centerHorizontal="true" />
-
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/crop_list_imageView"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/crop_list_gridLayout"
-        android:layout_gravity="center">
+        android:scaleType="centerCrop"
+        android:fitsSystemWindows="true"
+        android:src="@drawable/flat_plant" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/paddy_btn"
-            android:id="@+id/paddy"
-            android:layout_row="0"
-            android:layout_column="0"
-            android:drawableTop="@drawable/rsz_paddy"
-            android:clickable="true"
-            android:padding="5dp"
-            android:background="@drawable/button"
-            android:layout_margin="5dp"
-            android:onClick="onclick" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Maize"
-            android:id="@+id/maize"
-            android:layout_row="0"
-            android:layout_column="1"
-            android:drawableTop="@drawable/rsz_maize"
-            android:clickable="true"
-            android:padding="5dp"
-            android:background="@drawable/button"
-            android:layout_margin="5dp"
-            android:onClick="onclick"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sugercane"
-            android:id="@+id/suger"
-            android:layout_row="0"
-            android:layout_column="2"
-            android:drawableTop="@drawable/rsz_sugar"
-            android:clickable="true"
-            android:padding="5dp"
-            android:background="@drawable/button"
-            android:layout_margin="5dp"
-            android:onClick="onclick"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Potato"
-            android:id="@+id/potato"
-            android:layout_row="1"
-            android:layout_column="0"
-            android:drawableTop="@drawable/rsz_potato"
-            android:clickable="true"
-            android:padding="5dp"
-            android:background="@drawable/button"
-            android:layout_margin="5dp"
-            android:onClick="onclick"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tomato"
-            android:id="@+id/tomato"
-            android:layout_row="1"
-            android:layout_column="1"
-            android:drawableTop="@drawable/rsz_tomato"
-            android:clickable="true"
-            android:padding="5dp"
-            android:background="@drawable/button"
-            android:layout_margin="5dp"
-            android:onClick="onclick"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Wheat"
-            android:id="@+id/wheat"
-            android:layout_row="1"
-            android:layout_column="2"
-            android:drawableTop="@drawable/rsz_wheat"
-            android:clickable="true"
-            android:padding="5dp"
-            android:background="@drawable/button"
-            android:layout_margin="5dp"
-            android:onClick="onclick"/>
-    </GridLayout>
-
-
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cropListView"
+        android:layout_below="@+id/crop_list_imageView"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

@@ -3,6 +3,7 @@ package com.majors.paranshusinghal.krishi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -192,7 +193,8 @@ public class MapsActivity extends Activity implements
         );
         result.setResultCallback(this);
     }
-    public void getLocation(){
+
+    public void getLocation()throws SecurityException{
         //if(isOnline()) {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
        // }
@@ -259,7 +261,7 @@ public class MapsActivity extends Activity implements
         @Override
         protected  String doInBackground(Void... locs) {
 
-            final String urls = "http://api.openweathermap.org/data/2.5/forecast/daily?lat="+mLastLocation.getLatitude()+"&lon="+mLastLocation.getLongitude()+"&cnt=10&mode=json&appid=44db6a862fba0b067b1930da0d769e98";
+            final String urls = "http://api.openweathermap.org/data/2.5/forecast/daily?lat="+mLastLocation.getLatitude()+"&lon="+mLastLocation.getLongitude()+"&cnt=10&mode=json&appid=3a42ffe69d01b3960c783884803669c9";
             InputStream is = null;
             String answer=null;
             try {
@@ -298,6 +300,7 @@ public class MapsActivity extends Activity implements
             try{
                 json = new JSONObject(s);
                 JSONArray jsonArray = json.getJSONArray("list");
+                Toast.makeText(MapsActivity.this, String.format("size: %d", jsonArray.length()), Toast.LENGTH_SHORT).show();
                 Date date = new Date();
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);

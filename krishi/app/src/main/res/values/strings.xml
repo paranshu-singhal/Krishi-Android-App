@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Krishi</string>
-    <string name="localhost">http://10.0.0.8</string>
+
+    <string name="localhost">http://192.168.43.120</string>
+
     <string name="lat_txt">0</string>
     <string name="long_txt">0</string>
     <string name="latitude">Lat</string>
@@ -12,7 +14,7 @@
     <string name="location_detected">Location enabled</string>
     <string name="conn_failed">Connection Failed. Please check your network settings.</string>
     <string name="RESULT_CANCELED">User chose not to make required location settings changes.</string>
-    <string name="title_activity_scrolling1">scrollingActivity1</string>
+    <string name="title_activity_scrolling1">Information Activity</string>
     <string name="paddy_btn">Paddy</string>
     <string name="title">Title: </string>
     <string name="description">Description: </string>
@@ -35,6 +37,7 @@
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_news">Latest News</string>
     <string name="title_activity_register">Register</string>
+    <string name="title_activity_cropList">Package of Practices</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Mobile Number</string>
@@ -59,19 +62,71 @@
     <!-- Strings related to DialogLayout -->
 
     <string name="total_produce">Volume of produce(in Quintals)</string>
-    <string name="crop_to_sell">Name of Crop</string>
+    <string name="crop_to_sell">Name of Crop </string>
     <string name="price_quintal">Minimum Price per Quintal</string>
+    <string name="max_price_quintal">Maximum Price per Quintal</string>
     <string name="min_sell_vol">Minimum Volume to Sell per Buyer</string>
+    <string name="min_buy">Volume to Buy(in Quintals)</string>
+
     <string-array name="crop_list">
         <item>Paddy</item>
         <item>Maize</item>
-        <item>SugerCane</item>
+        <item>SugarCane</item>
         <item>Potato</item>
         <item>Tomato</item>
         <item>Wheat</item>
     </string-array>
+    <string-array name="year_list">
+        <item>2010_11</item>
+        <item>2011_12</item>
+        <item>2012_13</item>
+        <item>2013_14</item>
+        <item>2014_15</item>
+        <item>2015_16</item>
+    </string-array>
+
+    <string-array name="crop_category">
+    <item>Soil</item>
+    <item>Season</item>
+    <item>Area</item>
+    <item>Temperature</item>
+    </string-array>
+
     <string name="add_item">Add Item</string>
-    <string name="cancel">Cancel</string>
+
     <string name="totProduceError">This value should be greater than 0</string>
     <string name="FromListError">This value should be from the list</string>
+    <string name="change_profile">Change Profile</string>
+    <string name="delete_profile">Delete Profile</string>
+    <string name="delete_profile_msg">You are about to delete your account. Are you sure you want to do this?</string>
+    <string name="delete_item_msg">You are about to delete this item. Are you sure you want to do this?</string>
+    <string name="search_to_buy">Search to Buy</string>
+
+    <!-- Strings related to custom_row_sellerlist -->
+    <string name="idTextView">ID: </string>
+    <string name="min_vol_sell">Minimum Volume to Sell</string>
+    <string name="date_to_add">Date Item Added</string>
+    <string name="address">Address:</string>
+    <string name="bid">Bid</string>
+    <string name="contact">Contact</string>
+    <string name="search">Search</string>
+    <string name="title_activity_buyer_dashboard">BuyerDashboardActivity</string>
+
+    <string name="max_bid_string">Maximum Bid (Rs/Quintal)</string>
+    <string name="update">UPDATE</string>
+    <string name="delete">DELETE</string>
+    <string name="cancel">CANCEL</string>
+    <string name="search_item">Search New Item</string>
+    <string name="my_bid">My Bid</string>
+    <string name="confirm">CONFIRM</string>
+
+    <string name="select_year">Select Year </string>
+    <string name="title_activity_msp">Minimum Support Price</string>
+    <string name="enter_details">Enter Details</string>
+    <string name="search_msp">Search MSP</string>
+
+    <string name="variety">Variety</string>
+    <string name="year">YEAR</string>
+    <string name="crop">Crop</string>
+    <string name="msp">MSP</string>
 </resources>

@@ -5,20 +5,26 @@
     android:layout_height="match_parent"
     android:layout_marginStart="20dp"
     android:layout_marginEnd="20dp"
-    android:layout_marginBottom="10dp"
-    >
+    android:layout_marginTop="10dp"
+    android:background="@color/colorPrimary"
+    android:backgroundTint="@color/colorPrimary"
+    android:clickable="true"
+    android:contextClickable="true"
+    android:showDividers="middle|beginning|end">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/title"
+        android:textColor="@color/white"
         android:id="@+id/news_title"
         android:layout_margin="5dp" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white"
         android:text="@string/description"
         android:id="@+id/news_description"
         android:layout_margin="5dp"/>
@@ -26,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white"
         android:text="@string/description"
         android:id="@+id/news_pubDate"
         android:layout_margin="5dp"/>

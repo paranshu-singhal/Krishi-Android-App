@@ -1,61 +1,64 @@
 package com.majors.paranshusinghal.krishi;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-public class cropList extends Activity {
+import java.util.Arrays;
+import java.util.List;
 
-    private static final String TAG ="com.majors.paranshusinghal.krishi";
+public class cropList extends AppCompatActivity {
+
+    private static final String TAG ="com.majors.paranshusinghal.testApp";
+    private static final String TAGlog = "myTAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crop_list);
 
-        final ImageView newsImageView = (ImageView)findViewById(R.id.crop_list_imageView);
+
+        //ActionBar actionBar = getSupportActionBar();
+        //actionBar.setHomeButtonEnabled(true);
+
+        /*
+        final ImageView newsImageView = (ImageView) findViewById(R.id.crop_list_imageView);
         newsImageView.post(new Runnable() {
+                @Override
+                public void run() {
+                    int ht = newsImageView.getMeasuredHeight();
+                    int wd = newsImageView.getMeasuredWidth();
+                    int resID = getResources().getIdentifier("news_flat_icon", "drawable", TAG);
+                    Bitmap unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
+                    newsImageView.setImageBitmap(scaledBitmap);
+                }
+            });
+
+
+        */
+        final String crops[] = getResources().getStringArray(R.array.crop_list);
+        List<String> cropList = Arrays.asList(crops);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, cropList);
+        ListView listView = (ListView) findViewById(R.id.cropListView);
+        listView.setAdapter(adapter);
+
+
+        final Intent intent = new Intent(this, TabActivity.class);
+        final Bundle bundle = new Bundle();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void run() {
-                int ht = newsImageView.getMeasuredHeight();
-                int wd = newsImageView.getMeasuredWidth();
-                int resID = getResources().getIdentifier("flat_plant", "drawable", TAG);
-                Bitmap unscaledBitmap = BitmapFactory.decodeResource(getResources(), resID);
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, wd, ht, true);
-                newsImageView.setImageBitmap(scaledBitmap);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Log.d(TAGlog, crops[position]);
+                bundle.putString("id", crops[position]);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
-
-    }
-    public void onclick(View view){
-            Intent intent = new Intent(this, scrollingActivity1.class);
-            Bundle bundle = new Bundle();
-            switch (view.getId()){
-                case R.id.paddy:
-                    bundle.putString("id","paddy");
-                    break;
-                case R.id.wheat:
-                    bundle.putString("id","wheat");
-                    break;
-                case R.id.maize:
-                    bundle.putString("id","maize");
-                    break;
-                case R.id.suger:
-                    bundle.putString("id","sugar");
-                    break;
-                case R.id.potato:
-                    bundle.putString("id","potato");
-                    break;
-                case R.id.tomato:
-                    bundle.putString("id","tomato");
-                    break;
-            }
-        intent.putExtras(bundle);
-        startActivity(intent);
     }
 }
 

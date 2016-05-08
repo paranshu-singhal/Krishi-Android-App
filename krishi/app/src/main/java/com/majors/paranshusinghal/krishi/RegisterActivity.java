@@ -44,6 +44,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //Toast.makeText(this, this.getCallingActivity().toString(), Toast.LENGTH_SHORT).show();
+
         mPerson = (EditText) findViewById(R.id.editTextPerson);
         mPassword = (EditText) findViewById(R.id.editTextPassword);
         mPhone = (EditText) findViewById(R.id.editTextPhone);
@@ -62,10 +64,16 @@ public class RegisterActivity extends AppCompatActivity {
         mState.setError(null);
         mCountry.setError(null);
 
-        Bundle bundle = getIntent().getExtras();
-        final String tag = bundle.getString("tag");
-        Log.d(logTag, tag);
+        final String tag;
 
+        if(getIntent().getStringExtra("callingActivity").equals("SellerDashboardActivity")){
+            tag = DashboardCallingActivity();
+        }
+        else {
+            Bundle bundle = getIntent().getExtras();
+            tag = bundle.getString("tag");
+            Log.d(logTag, tag);
+        }
         Button mSubmitButton = (Button) findViewById(R.id.buttonSubmit);
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +89,19 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private String DashboardCallingActivity(){
+        Bundle bundle = getIntent().getExtras();
+
+        mPerson.setText(bundle.getString("name"));
+        mPhone.setText(bundle.getString("phone"));
+        mCity.setText(bundle.getString("city"));
+        mState.setText(bundle.getString("state"));
+        mAddress1.setText(bundle.getString("address1"));
+        mAddress2.setText(bundle.getString("address2"));
+        mCountry.setText(bundle.getString("country"));
+        return bundle.getString("tag");
     }
 
     private boolean AttemptRegister(String name, String password, String phone, String address1, String address2, String city, String state, String country) {
@@ -228,7 +249,7 @@ public class RegisterActivity extends AppCompatActivity {
                 values.put("country", country);
                 values.put("tag", tag);
                 Uri uri = getContentResolver().insert(uriusers, values);
-                Log.d(logTag, uri.toString());
+                //Log.d(logTag, uri.toString());
             }
             catch (Throwable t){
                 Log.d(TAGlog, t.getMessage());
